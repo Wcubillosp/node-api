@@ -1,9 +1,19 @@
 import * as jwt from "jsonwebtoken";
-import { generateHash, compareHash } from "../../../src/utils/handleBcrypt";
 import { IAuth } from "../model/auth.model";
 import UserModel from "../../user/model/user.model";
 import { JWT_SECRET } from "../../config";
+import * as bcrypt from "bcrypt";
 
+const saltOrRounds = 10;
+
+async function generateHash(passwordPlain: string): Promise<string> {
+  const hash = await bcrypt.hash(passwordPlain, saltOrRounds);
+  return hash;
+}
+
+async function compareHash(plain: string, hash: string): Promise<any> {
+  return await bcrypt.compare(plain, hash);
+}
 export class AuthService {
   constructor() {}
 
